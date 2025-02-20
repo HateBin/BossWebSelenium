@@ -14,8 +14,11 @@ import settings
 class TestAutomatedCommunication(BaseCase):
 
 
-    @pytest.mark.boss
+    @pytest.mark.BossAuto
     def test_automated_communication(self, driver):
+        self.logger.info('启动自动化沟通')
+        count = 0
+        is_break = False
         driver.get(settings.PROJECT_HOST)
         lp = LoginPage(driver)
         hp = HomePage(driver)
@@ -25,10 +28,19 @@ class TestAutomatedCommunication(BaseCase):
         jobs = hp.get_job_options()
         for job in jobs:
             hp.click_job_options(job)
-            hp.communicate()
+            result = hp.communicate()
+            count += result['communicateCount']
+            if result['isBreak']:
+                is_break = True
+                break
+        if is_break:
+            self.logger.info(f'自动化沟通结束, 今天的沟通次数已用完, 总共沟通次数为: {count}')
+        else:
+            self.logger.info(f'自动化沟通结束, 今天的沟通次数未用完, 总共沟通次数为: {count}')
+
 
 
 
 
 if __name__ == '__main__':
-    pytest.main(['-s', '-v', '-m', 'boss', settings.TEST_CASE_DIR])
+    pytest.main(['-s', '-v', '-m', 'BossAuto', settings.TEST_CASE_DIR])

@@ -43,4 +43,18 @@ TEXT_MAPPINGS = {
 }
 
 
-SALARY_EXPECTATION = 17 # 期望薪资，单位为k
+SALARY_EXPECTATION = 18 # 期望薪资，单位为k
+
+
+PASS_OPTIONS = [
+    '测试',
+]
+
+FAIL_OPTIONS = [
+    '统招',
+    '学信网',
+    '主管',
+    '负责人',
+    '组长',
+    '经理',
+]

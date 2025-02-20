@@ -22,7 +22,22 @@ class HomePageLocators:
         return 'xpath', f'/html/body/div[1]/div[2]/div[1]/div/div[1]/a[{index}]/span'
 
     @staticmethod
-    def job_salary_locator(number):
+    def hire_salary_locator(number):
         return 'xpath', f'/html/body/div[1]/div[2]/div[2]/div/div/div[1]/ul/div[{number}]/li/div[1]/div/span'
 
-    job_list_locator = ('xpath', '/html/body/div[1]/div[2]/div[2]/div/div/div[1]/ul')
+    @staticmethod
+    def hire_title_locator(number):
+        return 'xpath', f'/html/body/div[1]/div[2]/div[2]/div/div/div[1]/ul/div[{number}]/li/div[1]/div/a'
+
+    @staticmethod
+    def hire_option_locator(number):
+        return 'xpath', f'/html/body/div[1]/div[2]/div[2]/div/div/div[1]/ul/div[{number}]/li'
+
+    hire_list_locator = ('xpath', '/html/body/div[1]/div[2]/div[2]/div/div/div[1]/ul')
+
+    hire_detail_msg_locator = ('xpath', '/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div/div[2]/p')
+
+    communicate_button_locator = ('xpath', '/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div/div[1]/div[2]/a[2]')
+
+    communicate_pop_title_locator = ('xpath', '/html/body/div[8]/div[2]/div[1]/h3')
+    communicate_pop_return_button_locator = ('xpath', '/html/body/div[8]/div[2]/div[3]/a[1]')

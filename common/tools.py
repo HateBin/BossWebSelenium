@@ -1,6 +1,8 @@
 import sys
 import settings
 import re
+import time
+import random
 
 
 def get_opts(name):
@@ -35,6 +37,13 @@ def regular_expression(expression, text):
         groups = result.groups()
     return groups
 
+def time_sleep(second=None):
+    if not second:
+        second = random.uniform(1, 3)
+    time.sleep(second)
+
 
 if __name__ == '__main__':
-    print(regular_expression('^(.*?)-(.*?)K', '12-24K·13薪'))
+    exp = r'^(\d+)-(\d+)'
+    print(regular_expression(exp, '12-24K·13薪'))
+    print(regular_expression(exp, '11000-16000元/月'))
