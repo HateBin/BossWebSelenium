@@ -1,4 +1,6 @@
 import sys
+import settings
+import re
 
 
 def get_opts(name):
@@ -14,7 +16,25 @@ def get_opts(name):
         return args[args.index(name) + 1]
 
 
+def text_mapping_switch(text):
+    for key, value in settings.TEXT_MAPPINGS.items():
+        text = text.replace(key, value)
+    return text
+
+def regular_expression(expression, text):
+    """
+    正则表达式
+    :param text:
+    :return:
+    """
+    pattern = expression
+    regex = re.compile(pattern)
+    result = regex.search(text)
+    groups = None
+    if result:
+        groups = result.groups()
+    return groups
+
+
 if __name__ == '__main__':
-    # 可返回命令行的参数
-    res = sys.argv
-    print(res)
+    print(regular_expression('^(.*?)-(.*?)K', '12-24K·13薪'))

@@ -9,14 +9,13 @@ TEST_CASE_DIR = os.path.join(BASE_DIR, 'test_cases')
 # 项目域名
 PROJECT_HOST = 'https://www.zhipin.com/'
 
-
 # url信息
-INTERFACE={
+INTERFACE = {
     'login': '/communityManagement/#/login'
 }
 
 # 日志配置
-LOG_CONFIG={
+LOG_CONFIG = {
     'name': "testlog",
     'filename': os.path.join(BASE_DIR, 'logs/testlog{}.log'.format(time.strftime('%Y%m%d'))),
     'mode': 'a',
@@ -24,22 +23,24 @@ LOG_CONFIG={
     'debug': True
 }
 
-# 测试账户信息
-TEST_USER_DIST = {'account': 'pengjianbin17', 'password': 'aa123456', 'username': '常州市消委办主任A'}
-# TEST_USER_DIST = {'account': 'admin', 'password': 'czxf@123', 'username': '测试人员'}
-# TEST_USER_DIST = {'account': 'user003', 'password': 'czxf@123', 'username': 'user003'}
-
-
-
 # 全局查找默认等待时间
 DEFAULT_TIMEOUT = 3
 
 # 错误截屏保存路径
 ERROR_SCREENSHOT_DIR = os.path.join(BASE_DIR, 'screen_shot')
 
+TEXT_MAPPINGS = {
+    '': '1',
+    '': '2',
+    '': '3',
+    '': '4',
+    '': '5',
+    '': '6',
+    '': '7',
+    '': '8',
+    '': '9',
+    '': '0',
+}
 
-# # 浏览器驱动
-# BROWSER_DRIVERS = {
-#     'chrome': os.path.join(BASE_DIR, 'drivers', 'chromedriver_115.exe')
-#     # 'edge': os.path.join(BASE_DIR, 'drivers', 'msedgedriver_90.exe')
-# }
+
+SALARY_EXPECTATION = 17 # 期望薪资，单位为k

@@ -1,0 +1,6 @@
+requests~=2.32.3
+fonttools~=4.55.3
+setuptools~=72.1.0
+pytest~=8.3.4
+selenium~=4.28.1
+webdriver-manager~=4.0.2

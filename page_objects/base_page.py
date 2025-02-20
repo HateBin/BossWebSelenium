@@ -12,6 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
 
 import settings
 from common import logger
@@ -458,7 +459,8 @@ class BasePage:
         '''
         try:
             # 执行操作
-            value = self.element.find_elements(*self.locator)
+            parent_element = self.element.find_element(*self.locator)
+            value = parent_element.find_elements(By.XPATH, './*')
         except Exception as e:
             # 定义操作失败日志
             self.logger.exception(

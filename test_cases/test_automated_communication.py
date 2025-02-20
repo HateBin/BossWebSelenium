@@ -25,7 +25,7 @@ class TestAutomatedCommunication(BaseCase):
         jobs = hp.get_job_options()
         for job in jobs:
             hp.click_job_options(job)
-            hp.get_salary()
+            hp.communicate()
 
 
 

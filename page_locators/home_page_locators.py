@@ -24,3 +24,5 @@ class HomePageLocators:
     @staticmethod
     def job_salary_locator(number):
         return 'xpath', f'/html/body/div[1]/div[2]/div[2]/div/div/div[1]/ul/div[{number}]/li/div[1]/div/span'
+
+    job_list_locator = ('xpath', '/html/body/div[1]/div[2]/div[2]/div/div/div[1]/ul')
