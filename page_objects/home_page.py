@@ -166,10 +166,16 @@ class HomePage(BasePage):
                     self.logger.info(f'{title_text}薪资{salary[0]}-{salary[1]}k, 不符合期望')
                     continue
 
-                # 如果招聘的子元素大于等于3个（则表示该招聘子元素存在标签）并且标签为猎头，跳过
+                # 如果招聘的子元素大于等于3个（则表示该招聘子元素存在标签）
                 if self._get_hire_sub_element_count(number) >= 3:
-                    if self._get_hire_label_text(number) == '猎头':
-                        self.logger.info(f'{title_text}是猎头, 跳过')
+                    is_fail_hire_label = False  # 用于标记招聘的标签是否符合期望
+                    hire_label_text = self._get_hire_label_text(number)  # 获取招聘的标签
+                    for failHireLabel in settings.FAIL_HIRE_LABELS:  # 遍历期望不存在的标签
+                        if failHireLabel in hire_label_text:  # 如果标签存在期望不存在的标签，则表示标签不符合期望并终止循环
+                            self.logger.info(f'{title_text}的标签不符合期望: {hire_label_text}')
+                            is_fail_hire_label = True
+                            break
+                    if is_fail_hire_label:  # 如果标签不符合期望，跳过
                         continue
 
                 # 初始化标题通过和失败计数
@@ -177,15 +183,15 @@ class HomePage(BasePage):
                 title_fail_count = 0
 
                 # 检查标题是否包含所有期望的关键字
-                for passOption in settings.PASS_OPTIONS:  # 遍历期望存在的关键字
+                for passOption in settings.PASS_TITLE_TEXTS:  # 遍历期望存在的关键字
                     if passOption in title_text:  # 如果关键字存在标题中则记录title_pass_count数量
                         title_pass_count += 1
-                if title_pass_count != len(settings.PASS_OPTIONS):  # 如果记录的title_pass_count数量与期望的数量不一致，则跳过
-                    self.logger.info(f'{title_text}不符合期望, 标题存在不包含关键字: {settings.PASS_OPTIONS}')
+                if title_pass_count != len(settings.PASS_TITLE_TEXTS):  # 如果记录的title_pass_count数量与期望的数量不一致，则跳过
+                    self.logger.info(f'{title_text}不符合期望, 标题存在不包含关键字: {settings.PASS_TITLE_TEXTS}')
                     continue
 
                 # 检查标题是否包含任何失败关键字
-                for failOption in settings.FAIL_OPTIONS:  # 遍历不期望存在的关键字
+                for failOption in settings.FAIL_TEXTS:  # 遍历不期望存在的关键字
                     if failOption in title_text:  # 如果关键字存在标题中则记录title_fail_count数量并且终止循环
                         title_fail_count += 1
                         self.logger.info(f'{title_text}不符合期望, 标题包含关键字: {failOption}')
@@ -200,7 +206,7 @@ class HomePage(BasePage):
                 # 获取招聘者状态并检查是否符合期望
                 recruiter_state = self._get_recruiter_state() # 获取招聘者状态
                 is_pass_recruiter_state = False  # 用于表示招聘者状态是否符合期望
-                for passRecruiterState in settings.PASS_RECRUITER_STATE:  # 遍历期望的招聘者状态
+                for passRecruiterState in settings.PASS_RECRUITER_STATES:  # 遍历期望的招聘者状态
                     if passRecruiterState in recruiter_state:  # 如果招聘者状态符合期望，则记录is_pass_recruiter_state为True并终止循环
                         is_pass_recruiter_state = True
                         break
@@ -211,7 +217,7 @@ class HomePage(BasePage):
                 # 获取招聘详情并检查是否包含失败关键字
                 hire_detail_msg = self._get_hire_detail_msg()  # 获取招聘详情
                 is_fail_msg = False  # 用于表示招聘详情是否包含不期望存在的关键字
-                for failOption in settings.FAIL_OPTIONS:  # 遍历不期望的关键字
+                for failOption in settings.FAIL_TEXTS:  # 遍历不期望的关键字
                     if failOption in hire_detail_msg:  # 如果详情描述中包含了不期望存在的关键字则记录is_fail_msg为True并终止循环
                         is_fail_msg = True
                         self.logger.info(f'{title_text}不符合期望, 招聘详情包含了关键字: {failOption}')

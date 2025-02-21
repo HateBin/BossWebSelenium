@@ -46,11 +46,11 @@ TEXT_MAPPINGS = {
 SALARY_EXPECTATION = 18 # 期望薪资，单位为k
 
 
-PASS_OPTIONS = [
+PASS_TITLE_TEXTS = [
     '测试',
 ]
 
-FAIL_OPTIONS = [
+FAIL_TEXTS = [
     '统招',
     '学信网',
     '主管',
@@ -65,8 +65,12 @@ FAIL_OPTIONS = [
     '佛山',
 ]
 
-PASS_RECRUITER_STATE = [
+PASS_RECRUITER_STATES = [
     '在线',
     '刚刚活跃',
     '今日活跃',
+]
+
+FAIL_HIRE_LABELS = [
+    '猎头',
 ]
