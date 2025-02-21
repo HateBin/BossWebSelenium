@@ -47,6 +47,7 @@ class BasePage:
         self.locator = None
         # 初始化动作描述
         self.action = ''
+        self.isLogger = False
 
     def delay(self, second=0.5):
         '''
@@ -59,11 +60,12 @@ class BasePage:
         # 如：wait_element_is_visible(('xpath', '//input[@name="username"]'),action='输入用户名').delay(3).send_keys('11111')
         return self
 
-    def wait_element_is_visible(self, locator, action='', **kwargs):
+    def wait_element_is_visible(self, locator, action='', is_logger=True, **kwargs):
         '''
         等待元素可见
         :param locator:定位信息 tuple(by,expression)
         :param action: 操作说明 str
+        :param is_logger: 是否开启日志（针对成功日志）
         :param kwargs: timeout（等待时间），poll_frequency（轮循时间）
         :return: page_object
         '''
@@ -89,18 +91,21 @@ class BasePage:
             self.get_page_screenshot(action)
             raise e
         else:
-            # 操作成功记录日志
-            self.logger.debug(
-                '在{},{}操作的时候，等待{}元素可见【成功】'.format(self.name, action, locator)
-            )
+            if is_logger:
+                self.isLogger = True
+                # 操作成功记录日志
+                self.logger.debug(
+                    '在{},{}操作的时候，等待{}元素可见【成功】'.format(self.name, action, locator)
+                )
             # 返回对象，便于链式编程
             return self
 
-    def wait_element_to_be_clickable(self, locator, action='', **kwargs):
+    def wait_element_to_be_clickable(self, locator, action='', is_logger=True, **kwargs):
         '''
         等待元素可被点击
         :param locator:定位信息 tuple(by,expression)
         :param action:操作说明  str
+        :param is_logger bool 是否开启日志（成功日志）
         :param kwargs:timeout（等待时间），poll_frequency（轮循时间）
         :return:
         '''
@@ -125,18 +130,21 @@ class BasePage:
             self.get_page_screenshot(action)
             raise e
         else:
-            # 操作成功记录日志
-            self.logger.debug(
-                '在{},{}操作的时候，等待{}元素可点击见【成功】'.format(self.name, action, locator)
-            )
+            if logger:
+                self.isLogger = True
+                # 操作成功记录日志
+                self.logger.debug(
+                    '在{},{}操作的时候，等待{}元素可点击见【成功】'.format(self.name, action, locator)
+                )
             # 返回对象，便于链式编程
             return self
 
-    def wait_elment_is_loaded(self, locator, action='', **kwargs):
+    def wait_elment_is_loaded(self, locator, action='', is_logger=True, **kwargs):
         '''
         等待元素加载到dom中
         :param locator:定位信息 tuple(by,expression)
         :param action:操作说明  str
+        :param is_logger bool 是否开启日志（成功日志）
         :param kwargs:timeout（等待时间），poll_frequency（轮循时间）
         :return:
         '''
@@ -161,10 +169,12 @@ class BasePage:
             self.get_page_screenshot(action)
             raise e
         else:
-            # 操作成功记录日志
-            self.logger.debug(
-                '在{},{}操作的时候，等待{}元素加载到文档【成功】'.format(self.name, action, locator)
-            )
+            if is_logger:
+                self.isLogger = True
+                # 操作成功记录日志
+                self.logger.debug(
+                    '在{},{}操作的时候，等待{}元素加载到文档【成功】'.format(self.name, action, locator)
+                )
             # 返回对象，便于链式编程
             return self
 
@@ -190,10 +200,11 @@ class BasePage:
             # 操作失败后截屏
             self.get_page_screenshot(self.action)
         else:
-            # 操作成功后日志
-            self.logger.debug(
-                '在{},{}操作的时候，对{}元素输入{}【成功】'.format(self.name, self.action, self.locator, content)
-            )
+            if self.isLogger:
+                # 操作成功后日志
+                self.logger.debug(
+                    '在{},{}操作的时候，对{}元素输入{}【成功】'.format(self.name, self.action, self.locator, content)
+                )
         finally:
             # 清空wait缓存：因执行send_keys方法后，会进行下一步其他操作，故需要清空action，locator等内容
             # 私有方法，仅在内部可调用
@@ -219,7 +230,8 @@ class BasePage:
                 self.element.send_keys(Keys.TAB)
             else:
                 # self.element.send_keys(content)
-                driver = self.driver.find_element('xpath', '/html/body/div[*]/div/div[2]/div/div[2]/div[2]/span/div[1]/span/input')
+                driver = self.driver.find_element('xpath',
+                                                  '/html/body/div[*]/div/div[2]/div/div[2]/div[2]/span/div[1]/span/input')
                 driver.send_keys(content)
 
         except Exception as e:
@@ -230,10 +242,11 @@ class BasePage:
             # 操作失败后截屏
             self.get_page_screenshot(self.action)
         else:
-            # 操作成功后日志
-            self.logger.debug(
-                '在{},{}操作的时候，对{}元素输入{}【成功】'.format(self.name, self.action, self.locator, content)
-            )
+            if self.isLogger:
+                # 操作成功后日志
+                self.logger.debug(
+                    '在{},{}操作的时候，对{}元素输入{}【成功】'.format(self.name, self.action, self.locator, content)
+                )
         finally:
             # 清空wait缓存：因执行send_keys方法后，会进行下一步其他操作，故需要清空action，locator等内容
             # 私有方法，仅在内部可调用
@@ -269,10 +282,11 @@ class BasePage:
             # 操作失败后截屏
             self.get_page_screenshot(self.action)
         else:
-            # 操作成功后日志
-            self.logger.debug(
-                '在{},{}操作的时候，点击元素{}【成功】'.format(self.name, self.action, self.locator)
-            )
+            if self.isLogger:
+                # 操作成功后日志
+                self.logger.debug(
+                    '在{},{}操作的时候，点击元素{}【成功】'.format(self.name, self.action, self.locator)
+                )
         finally:
             # 清空wait缓存：因执行click方法后，会进行下一步其他操作，故需要清空action，locator等内容
             # 私有方法，仅在内部可调用
@@ -297,15 +311,15 @@ class BasePage:
             # 操作失败后截屏
             self.get_page_screenshot(self.action)
         else:
-            # 操作成功后日志
-            self.logger.debug(
-                '在{},{}操作的时候，鼠标移动到{}【成功】'.format(self.name, self.action, self.locator)
-            )
+            if self.isLogger:
+                # 操作成功后日志
+                self.logger.debug(
+                    '在{},{}操作的时候，鼠标移动到{}【成功】'.format(self.name, self.action, self.locator)
+                )
         finally:
             # 清空wait缓存：因执行click方法后，会进行下一步其他操作，故需要清空action，locator等内容
             # 私有方法，仅在内部可调用
             self.__clear_cache()
-
 
     def script_element(self):
         '''
@@ -327,15 +341,15 @@ class BasePage:
             # 操作失败后截屏
             self.get_page_screenshot(self.action)
         else:
-            # 操作成功后日志
-            self.logger.debug(
-                '在{},{}操作的时候，点击元素{}【成功】'.format(self.name, self.action, self.locator)
-            )
+            if self.isLogger:
+                # 操作成功后日志
+                self.logger.debug(
+                    '在{},{}操作的时候，点击元素{}【成功】'.format(self.name, self.action, self.locator)
+                )
         finally:
             # 清空wait缓存：因执行click方法后，会进行下一步其他操作，故需要清空action，locator等内容
             # 私有方法，仅在内部可调用
             self.__clear_cache()
-
 
     def click_elment_by_js(self):
         '''
@@ -355,15 +369,15 @@ class BasePage:
             # 操作失败后截屏
             self.get_page_screenshot(self.action)
         else:
-            # 操作成功后日志
-            self.logger.debug(
-                '在{},{}操作的时候，点击元素{}【成功】'.format(self.name, self.action, self.locator)
-            )
+            if self.isLogger:
+                # 操作成功后日志
+                self.logger.debug(
+                    '在{},{}操作的时候，点击元素{}【成功】'.format(self.name, self.action, self.locator)
+                )
         finally:
             # 清空wait缓存：因执行click方法后，会进行下一步其他操作，故需要清空action，locator等内容
             # 私有方法，仅在内部可调用
             self.__clear_cache()
-
 
     # def click_element(self, locator, action=''):
     #     """
@@ -400,10 +414,11 @@ class BasePage:
             # 操作失败后截屏
             self.get_page_screenshot(self.action)
         else:
-            # 操作成功后日志
-            self.logger.debug(
-                '在{},{}操作的时候，获取{}元素的文本【成功】'.format(self.name, self.action, self.locator)
-            )
+            if self.isLogger:
+                # 操作成功后日志
+                self.logger.debug(
+                    '在{},{}操作的时候，获取{}元素的文本【成功】'.format(self.name, self.action, self.locator)
+                )
             # 返回value信息
             return value
         finally:
@@ -442,15 +457,15 @@ class BasePage:
             # 操作失败后截屏
             self.get_page_screenshot(self.action)
         else:
-            # 操作成功后日志
-            self.logger.debug(
-                '在{},{}操作的时候，获取{}元素的{}属性【成功】'.format(self.name, self.action, self.locator, name)
-            )
+            if self.isLogger:
+                # 操作成功后日志
+                self.logger.debug(
+                    '在{},{}操作的时候，获取{}元素的{}属性【成功】'.format(self.name, self.action, self.locator, name)
+                )
             # 返回value信息
             return value
         finally:
             self.__clear_cache()
-
 
     def get_child_elements(self):
         '''
@@ -469,12 +484,12 @@ class BasePage:
             # 操作失败后截屏
             self.get_page_screenshot(self.action)
         else:
-            # 操作成功后日志
-            self.logger.debug(
-                '在{},{}操作的时候，获取{}元素的子元素【成功】'.format(self.name, self.action, self.locator)
-            )
+            if self.isLogger:
+                # 操作成功后日志
+                self.logger.debug(
+                    '在{},{}操作的时候，获取{}元素的子元素【成功】'.format(self.name, self.action, self.locator)
+                )
             return value
-
 
     def save_code_png(self):
         '''
@@ -496,11 +511,12 @@ class BasePage:
             # 操作失败后截屏
             self.get_page_screenshot(self.action)
         else:
-            # 操作成功后日志
-            self.logger.debug(
-                '在{},{}操作的时候，保存验证码图片【成功】'.format(self.name, self.action)
+            if self.isLogger:
+                # 操作成功后日志
+                self.logger.debug(
+                    '在{},{}操作的时候，保存验证码图片【成功】'.format(self.name, self.action)
                 )
-                # 返回value信息
+            # 返回value信息
         finally:
             self.__clear_cache()
 
@@ -520,13 +536,13 @@ class BasePage:
             # 操作失败后截屏
             self.get_page_screenshot(self.action)
         else:
-            # 操作成功后日志
-            self.logger.debug(
-                '在{},{}操作的时候，刷新页面操作【成功】'.format(self.name, self.action)
-            )
+            if self.isLogger:
+                # 操作成功后日志
+                self.logger.debug(
+                    '在{},{}操作的时候，刷新页面操作【成功】'.format(self.name, self.action)
+                )
         finally:
             self.__clear_cache()
-
 
     def switch_to_new_window(self, handle=None, action=''):
         '''
@@ -556,9 +572,10 @@ class BasePage:
             self.get_page_screenshot(action)
             raise e
         else:
-            self.logger.exception(
-                '在{},{}操作的时候，切换到窗口{}【成功】'.format(self.name, self.action, handle)
-            )
+            if self.isLogger:
+                self.logger.exception(
+                    '在{},{}操作的时候，切换到窗口{}【成功】'.format(self.name, self.action, handle)
+                )
 
     def get_page_screenshot(self, action):
         '''
@@ -577,9 +594,10 @@ class BasePage:
         )
         self.driver.save_screenshot(img_path)
         if self.driver.save_screenshot(img_path):
-            self.logger.info('生成错误截屏{}【成功】'.format(img_path))
+            if self.isLogger:
+                self.logger.debug('生成错误截屏{}【成功】'.format(img_path))
         else:
-            self.logger.info('生成错误截屏{}【失败】'.format(img_path))
+            self.logger.exception('生成错误截屏{}【失败】'.format(img_path))
 
     def replace_args_by_re(self, json_s, obj):
         '''
@@ -605,6 +623,7 @@ class BasePage:
         self.element = None
         self.locator = None
         self.action = ''
+        self.isLogger = False
 
 
 if __name__ == '__main__':
@@ -614,4 +633,5 @@ if __name__ == '__main__':
         page = BasePage(driver)
         page.driver.get('http://testingedu.com.cn:8000/Home/user/login.html')
         # 链式编程
-        page.wait_element_is_visible(('xpath', '//input[@name="username"]'), action='输入用户名').delay(3).send_keys('11111')
+        page.wait_element_is_visible(('xpath', '//input[@name="username"]'), action='输入用户名').delay(3).send_keys(
+            '11111')

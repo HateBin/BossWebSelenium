@@ -9,8 +9,8 @@ class BaseCase:
 
     @classmethod
     def setup_class(cls):
-        cls.logger.info("=========={}测试开始==========".format(cls.name))
+        cls.logger.info("=========={}程序开始==========".format(cls.name if cls.name else ""))
 
     @classmethod
     def teardown_class(cls):
-        cls.logger.info("=========={}测试结束==========".format(cls.name))
+        cls.logger.info("=========={}程序结束==========".format(cls.name if cls.name else ""))
