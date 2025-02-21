@@ -4,7 +4,6 @@
 @Auth ： pengjianbin
 @File ：test_automated_communication.py
 """
-from common.tools import update_communicate_count
 from page_objects.login_page import LoginPage
 from page_objects.home_page import HomePage
 from test_cases.base_case import BaseCase
@@ -59,9 +58,6 @@ class TestAutomatedCommunication(BaseCase):
             # 获取沟通次数并累加到总次数
             communicate_count = result['communicateCount']
             count += communicate_count
-
-            # 更新数据库中的沟通次数
-            update_communicate_count(add=communicate_count)
 
             # 如果需要中断循环，则设置标志变量并跳出循环
             if result['isBreak']:

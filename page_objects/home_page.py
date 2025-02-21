@@ -7,7 +7,7 @@
 import settings
 from page_objects.base_page import BasePage
 from page_locators.home_page_locators import HomePageLocators as Loc
-from common.tools import text_mapping_switch, regular_expression, time_sleep
+from common.tools import text_mapping_switch, regular_expression, time_sleep, update_communicate_count
 
 
 class HomePage(BasePage):
@@ -159,11 +159,12 @@ class HomePage(BasePage):
             # 遍历新的招聘启事，从新获取的招聘中开始遍历
             for number in range(1 + old_job_count, job_count + 1):
                 title_text = self._get_hire_title(number)  # 获取招聘的标题
+                company_name = self._get_hire_company(number)  # 获取招聘的公司名称
                 salary: tuple = self._get_hire_salary(number)  # 获取招聘的薪资，tuple[0]为最低，tuple[1]为最高
 
                 # 如果薪资不符合期望，跳过
                 if salary[1] < settings.SALARY_EXPECTATION:
-                    self.logger.info(f'{title_text}薪资{salary[0]}-{salary[1]}k, 不符合期望')
+                    self.logger.info(f'{company_name}招聘: {title_text}薪资{salary[0]}-{salary[1]}k, 不符合期望')
                     continue
 
                 # 如果招聘的子元素大于等于3个（则表示该招聘子元素存在标签）
@@ -172,7 +173,7 @@ class HomePage(BasePage):
                     hire_label_text = self._get_hire_label_text(number)  # 获取招聘的标签
                     for failHireLabel in settings.FAIL_HIRE_LABELS:  # 遍历期望不存在的标签
                         if failHireLabel in hire_label_text:  # 如果标签存在期望不存在的标签，则表示标签不符合期望并终止循环
-                            self.logger.info(f'{title_text}的标签不符合期望: {hire_label_text}')
+                            self.logger.info(f'{company_name}招聘: {title_text}的标签不符合期望: {hire_label_text}')
                             is_fail_hire_label = True
                             break
                     if is_fail_hire_label:  # 如果标签不符合期望，跳过
@@ -187,31 +188,39 @@ class HomePage(BasePage):
                     if passOption in title_text:  # 如果关键字存在标题中则记录title_pass_count数量
                         title_pass_count += 1
                 if title_pass_count != len(settings.PASS_TITLE_TEXTS):  # 如果记录的title_pass_count数量与期望的数量不一致，则跳过
-                    self.logger.info(f'{title_text}不符合期望, 标题存在不包含关键字: {settings.PASS_TITLE_TEXTS}')
+                    self.logger.info(
+                        f'{company_name}招聘: {title_text}不符合期望, 标题存在不包含关键字: {settings.PASS_TITLE_TEXTS}')
                     continue
 
                 # 检查标题是否包含任何失败关键字
                 for failOption in settings.FAIL_TEXTS:  # 遍历不期望存在的关键字
                     if failOption in title_text:  # 如果关键字存在标题中则记录title_fail_count数量并且终止循环
                         title_fail_count += 1
-                        self.logger.info(f'{title_text}不符合期望, 标题包含关键字: {failOption}')
+                        self.logger.info(f'{company_name}招聘: {title_text}不符合期望, 标题包含关键字: {failOption}')
                         break
                 if title_fail_count > 0:  # 如果存在不期望的关键字在标题中时，则跳过
                     continue
+
+                company_fail_count = 0
+                for failCompanyText in settings.FAIL_COMPANIES:
+                    if failCompanyText in company_name:  # 如果公司名称包含不期望的关键字，则记录company_fail_count数量并且终止循环
+                        company_fail_count += 1
+                        self.logger.info(f'{company_name}招聘: {title_text}不符合期望, 公司名称包含关键字: {failCompanyText}')
+                        break
 
                 # 尝试点击招聘选项
                 self._click_hire_option(number)
                 time_sleep()
 
                 # 获取招聘者状态并检查是否符合期望
-                recruiter_state = self._get_recruiter_state() # 获取招聘者状态
+                recruiter_state = self._get_recruiter_state()  # 获取招聘者状态
                 is_pass_recruiter_state = False  # 用于表示招聘者状态是否符合期望
                 for passRecruiterState in settings.PASS_RECRUITER_STATES:  # 遍历期望的招聘者状态
                     if passRecruiterState in recruiter_state:  # 如果招聘者状态符合期望，则记录is_pass_recruiter_state为True并终止循环
                         is_pass_recruiter_state = True
                         break
                 if not is_pass_recruiter_state:  # 如果招聘者状态不符合期望，则跳过
-                    self.logger.info(f'{title_text}不符合期望, 招聘者状态不符合期望: {recruiter_state}')
+                    self.logger.info(f'{company_name}招聘: {title_text}不符合期望, 招聘者状态不符合期望: {recruiter_state}')
                     continue
 
                 # 获取招聘详情并检查是否包含失败关键字
@@ -220,7 +229,7 @@ class HomePage(BasePage):
                 for failOption in settings.FAIL_TEXTS:  # 遍历不期望的关键字
                     if failOption in hire_detail_msg:  # 如果详情描述中包含了不期望存在的关键字则记录is_fail_msg为True并终止循环
                         is_fail_msg = True
-                        self.logger.info(f'{title_text}不符合期望, 招聘详情包含了关键字: {failOption}')
+                        self.logger.info(f'{company_name}招聘: {title_text}不符合期望, 招聘详情包含了关键字: {failOption}')
                         break
                 if is_fail_msg:  # 如果详情描述中包含了不期望存在的关键字，则跳过
                     continue
@@ -237,7 +246,12 @@ class HomePage(BasePage):
                     return {'communicateCount': communicate_count, 'isBreak': True}
                 else:  # 如果沟通弹出标题不为“无法进行沟通”，则记录沟通次数和点击留在此页
                     communicate_count += 1  # 记录沟通次数
+
+                    # 更新yaml文件的历史沟通次数
+                    update_communicate_count(add=communicate_count)
+
                     self._click_communicate_pop_return()  # 点击留在此页
+                    self.logger.debug(f'{company_name}招聘: {title_text}已完成立即沟通')
                     time_sleep()
 
                 # 滑动招聘列表
@@ -318,6 +332,26 @@ class HomePage(BasePage):
             is_logger=False,
         ).get_element_text()
 
+    def _get_hire_company(self, number):
+        """
+        根据编号获取对应的招聘公司名称。
+
+        此方法通过等待特定的招聘公司元素变得可见，然后返回该元素的文本内容，
+        即招聘公司的名称。此方法主要用于自动化测试过程中，识别和获取特定的招聘公司信息。
+
+        参数:
+        - number (int): 招聘公司的编号，用于定位特定的招聘公司元素。
+
+        返回:
+        - str: 特定招聘公司的名称文本。
+        """
+        # 使用显式等待，确保招聘公司元素可见后再进行文本获取操作
+        return self.wait_element_is_visible(
+            locator=Loc.hire_company_locator(number),
+            action='获取招聘公司',
+            is_logger=False,
+        ).get_element_text()
+
     def _click_hire_option(self, number):
         """
         点击招聘选项
@@ -334,6 +368,7 @@ class HomePage(BasePage):
         self.wait_element_is_visible(
             locator=Loc.hire_option_locator(number),
             action='点击招聘选项',
+            is_logger=False,
         ).click_element()
 
     def _get_hire_sub_element_count(self, number):
@@ -431,7 +466,8 @@ class HomePage(BasePage):
             # 如果是“立即沟通”按钮，点击它
             self.wait_element_is_visible(
                 locator=Loc.communicate_button_locator,
-                action='点击沟通按钮'
+                action='点击沟通按钮',
+                is_logger=False,
             ).click_element()
             return True
         return False
@@ -462,6 +498,7 @@ class HomePage(BasePage):
         self.wait_element_is_visible(
             locator=Loc.communicate_pop_return_button_locator,
             action='点击沟通弹窗"留在此页"',
+            is_logger=False,
         ).click_element()
 
     def _script_element_hire_list(self, number):

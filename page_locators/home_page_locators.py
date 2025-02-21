@@ -33,6 +33,11 @@ class HomePageLocators:
     def hire_title_locator(number):
         return 'xpath', f'/html/body/div[1]/div[2]/div[2]/div/div/div[1]/ul/div[{number}]/li/div[1]/div/a'
 
+    # 招聘公司定位
+    @staticmethod
+    def hire_company_locator(number):
+        return 'xpath', f'/html/body/div[1]/div[2]/div[2]/div/div/div[1]/ul/div[{number}]/li/div[2]/a/span'
+
     # 招聘选项定位
     @staticmethod
     def hire_option_locator(number):

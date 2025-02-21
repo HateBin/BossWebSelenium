@@ -63,6 +63,14 @@ FAIL_TEXTS = [
     '武汉',
     '珠海',
     '佛山',
+    '硬件',
+    '英语',
+    '英文',
+]
+
+
+FAIL_COMPANIES = [
+    '拓保',
 ]
 
 PASS_RECRUITER_STATES = [
@@ -73,4 +81,5 @@ PASS_RECRUITER_STATES = [
 
 FAIL_HIRE_LABELS = [
     '猎头',
+    '派遣',
 ]
