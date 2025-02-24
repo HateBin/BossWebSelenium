@@ -13,7 +13,7 @@ import settings
 class TestAutomatedCommunication(BaseCase):
 
 
-    @pytest.mark.BossAuto
+    @pytest.mark.boss
     def test_automated_communication(self, driver):
         """
         执行自动化沟通测试，模拟用户登录并进行职位沟通
@@ -49,19 +49,26 @@ class TestAutomatedCommunication(BaseCase):
 
         # 遍历每个职位选项
         for job in jobs:
-            # 点击职位选项
-            hp.click_job_options(job)
+            while True:
+                # 点击职位选项
+                hp.click_job_options(job)
 
-            # 进行沟通并获取结果
-            result = hp.communicate()
+                # 进行沟通并获取结果
+                result = hp.communicate()
 
-            # 获取沟通次数并累加到总次数
-            communicate_count = result['communicateCount']
-            count += communicate_count
+                # 获取沟通次数并累加到总次数
+                communicate_count = result['communicateCount']
+                count += communicate_count
 
-            # 如果需要中断循环，则设置标志变量并跳出循环
-            if result['isBreak']:
-                is_break = True
+                if result['isGoToChat']:
+                    continue
+
+                # 如果需要中断循环，则设置标志变量并跳出循环
+                if result['switchJob'] or result['isBreak']:
+                    if result['isBreak']:
+                        is_break = True
+                    break
+            if is_break:
                 break
 
         # 根据is_break的值，记录不同的结束信息
@@ -75,4 +82,4 @@ class TestAutomatedCommunication(BaseCase):
 
 
 if __name__ == '__main__':
-    pytest.main(['-s', '-v', '-m', 'BossAuto', settings.TEST_CASE_DIR])
+    pytest.main(['-s', '-v', '-m', 'boss', settings.TEST_CASE_DIR])

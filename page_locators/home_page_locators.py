@@ -43,6 +43,8 @@ class HomePageLocators:
     def hire_option_locator(number):
         return 'xpath', f'/html/body/div[1]/div[2]/div[2]/div/div/div[1]/ul/div[{number}]/li'
 
+    hire_detail_msg_container_locator = ('xpath', '/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div/div[2]/p')
+
     # 招聘选项标签定位
     @staticmethod
     def hire_option_label_locator(number):
@@ -50,6 +52,10 @@ class HomePageLocators:
 
     # 招聘列表定位
     hire_list_locator = ('xpath', '/html/body/div[1]/div[2]/div[2]/div/div/div[1]/ul')
+
+    # 招聘学历定位
+    hire_education_background_locator = (
+        'xpath', '/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div/div[1]/div[1]/ul/li[3]')
 
     # 招聘详情描述定位
     hire_detail_msg_locator = ('xpath', '/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div/div[2]/p')
@@ -65,3 +71,9 @@ class HomePageLocators:
 
     # 沟通弹窗返回按钮定位
     communicate_pop_return_button_locator = ('xpath', '/html/body/div[8]/div[2]/div[3]/a[1]')
+
+    # 导航栏"推荐"的类名定位
+    navigation_bar_recommend_class_locator = ('xpath', '/html/body/div[1]/div[1]/div/div/div[1]/div[2]/ul/li[2]')
+
+    # 导航栏"推荐"定位
+    navigation_bar_recommend_locator = ('xpath', '/html/body/div[1]/div[1]/div/div/div[1]/div[2]/ul/li[2]/a')

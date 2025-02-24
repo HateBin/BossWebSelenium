@@ -42,21 +42,13 @@ TEXT_MAPPINGS = {
     '': '0',
 }
 
+PASS_EDUCATION_BACKGROUNDS = ['大专', '本科']
 
-SALARY_EXPECTATION = 18 # 期望薪资，单位为k
-
-
-PASS_TITLE_TEXTS = [
-    '测试',
-]
+SALARY_EXPECTATION = 18  # 期望薪资，单位为k
 
 FAIL_TEXTS = [
     '统招',
     '学信网',
-    '主管',
-    '负责人',
-    '组长',
-    '经理',
     '东莞',
     '厦门',
     '广州',
@@ -66,8 +58,21 @@ FAIL_TEXTS = [
     '硬件',
     '英语',
     '英文',
+    '游戏',
+    '证券',
+    '金融',
 ]
 
+PASS_TITLE_TEXTS = [
+    '测试',
+]
+
+FAIL_TITLE_TEXTS = [
+    '主管',
+    '负责人',
+    '组长',
+    '经理',
+]
 
 FAIL_COMPANIES = [
     '拓保',
