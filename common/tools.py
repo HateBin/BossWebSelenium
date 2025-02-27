@@ -79,9 +79,9 @@ def get_date(res_format: str = None, year=None, month=None, day=None, hour=None,
 # 读取yaml文件
 def yaml_read(yaml_name, yaml_key=None, dic_name=None):
     if dic_name:
-        path = os.path.dirname(os.path.dirname(__file__)) + f'\\{dic_name}\\{yaml_name}'
+        path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)) + f'/{dic_name}/{yaml_name}')
     else:
-        path = os.path.dirname(os.path.dirname(__file__)) + f'\\yaml\\{yaml_name}'
+        path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)) + f'/yaml/{yaml_name}')
     is_exist = os.path.exists(path + '.yml')
     if is_exist:
         path += '.yml'
@@ -140,4 +140,4 @@ if __name__ == '__main__':
     # exp = r'^(\d+)-(\d+)'
     # print(regular_expression(exp, '12-24K·13薪'))
     # print(regular_expression(exp, '11000-16000元/月'))
-    update_communicate_count(add=20)
+    update_communicate_count(add=1)
