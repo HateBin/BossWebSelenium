@@ -46,9 +46,10 @@ class TestAutomatedCommunication(BaseCase):
 
         # 获取所有职位选项
         jobs = hp.get_job_options()
-
-        # 遍历每个职位选项
-        for job in jobs:
+        job_index = 0
+        while True:
+            job = jobs[job_index]
+            # 遍历每个职位选项
             while True:
                 # 点击职位选项
                 hp.click_job_options(job)
@@ -70,7 +71,11 @@ class TestAutomatedCommunication(BaseCase):
                     break
             if is_break:
                 break
-
+            if job_index + 1 == len(jobs):
+                job_index = 0
+                hp.refresh_page()
+            else:
+                job_index += 1
         # 根据is_break的值，记录不同的结束信息
         if is_break:
             self.logger.info(f'自动化沟通结束, 今天的沟通次数已用完, 总共沟通次数为: {count}')

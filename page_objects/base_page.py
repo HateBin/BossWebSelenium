@@ -321,9 +321,66 @@ class BasePage:
             # 私有方法，仅在内部可调用
             self.__clear_cache()
 
-    def script_element(self):
+    def script_windows_element(self, is_logger: bool = True):
         '''
-        滚动元素
+        滚动主体滚动条
+        :return:
+        '''
+        try:
+            # 执行操作
+            js = 'window.scrollTo(0, document.body.scrollHeight);'
+            self.driver.execute_script(js)
+        except Exception as e:
+            # 定义操作失败日志
+            self.logger.exception(
+                '在{},滚动主体滚动条操作的时候【失败】'.format(self.name)
+            )
+            # 操作失败后截屏
+            self.get_page_screenshot('滚动主体滚动条')
+        else:
+            if is_logger:
+                # 操作成功后日志
+                self.logger.debug(
+                    '在{},滚动主体滚动条操作的时候【成功】'.format(self.name)
+                )
+        finally:
+            # 清空wait缓存：因执行click方法后，会进行下一步其他操作，故需要清空action，locator等内容
+            # 私有方法，仅在内部可调用
+            self.__clear_cache()
+
+    def script_specify_element(self):
+        '''
+        滚动指定元素的滚动条
+        :return:
+        '''
+        # 防止在wait方法执行前调用script方法
+        if self.element is None:
+            raise RuntimeError('不能在wait方法之前调用元素上的方法')
+        try:
+            # 执行操作
+            js = 'arguments[0].scrollTop = arguments[0].scrollHeight;'
+            self.driver.execute_script(js, self.element)
+        except Exception as e:
+            # 定义操作失败日志
+            self.logger.exception(
+                '在{},{}操作的时候，滚动元素滚动条{}【失败】'.format(self.name, self.action, self.locator)
+            )
+            # 操作失败后截屏
+            self.get_page_screenshot(self.action)
+        else:
+            if self.isLogger:
+                # 操作成功后日志
+                self.logger.debug(
+                    '在{},{}操作的时候，滚动元素滚动条{}【成功】'.format(self.name, self.action, self.locator)
+                )
+        finally:
+            # 清空wait缓存：因执行click方法后，会进行下一步其他操作，故需要清空action，locator等内容
+            # 私有方法，仅在内部可调用
+            self.__clear_cache()
+
+    def script_go_to_specify_element(self):
+        '''
+        滚动到指定元素
         :return:
         '''
         # 防止在wait方法执行前调用script方法
@@ -336,7 +393,7 @@ class BasePage:
         except Exception as e:
             # 定义操作失败日志
             self.logger.exception(
-                '在{},{}操作的时候，点击元素{}【失败】'.format(self.name, self.action, self.locator)
+                '在{},{}操作的时候，滚动到指定元素{}【失败】'.format(self.name, self.action, self.locator)
             )
             # 操作失败后截屏
             self.get_page_screenshot(self.action)
@@ -344,7 +401,7 @@ class BasePage:
             if self.isLogger:
                 # 操作成功后日志
                 self.logger.debug(
-                    '在{},{}操作的时候，点击元素{}【成功】'.format(self.name, self.action, self.locator)
+                    '在{},{}操作的时候，滚动到指定元素{}【成功】'.format(self.name, self.action, self.locator)
                 )
         finally:
             # 清空wait缓存：因执行click方法后，会进行下一步其他操作，故需要清空action，locator等内容
@@ -520,7 +577,7 @@ class BasePage:
         finally:
             self.__clear_cache()
 
-    def refresh_element(self):
+    def refresh_element(self, is_logger: bool = True):
         '''
         刷新页面
         :return:
@@ -536,7 +593,7 @@ class BasePage:
             # 操作失败后截屏
             self.get_page_screenshot(self.action)
         else:
-            if self.isLogger:
+            if is_logger:
                 # 操作成功后日志
                 self.logger.debug(
                     '在{},{}操作的时候，刷新页面操作【成功】'.format(self.name, self.action)

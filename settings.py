@@ -23,6 +23,9 @@ LOG_CONFIG = {
     'debug': True
 }
 
+# 默认操作间隔, [min, max] or int
+OPERATION_INTERVAL = [1, 3]
+
 # 全局查找默认等待时间
 DEFAULT_TIMEOUT = 3
 

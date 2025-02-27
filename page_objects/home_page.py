@@ -14,6 +14,9 @@ class HomePage(BasePage):
     # 页面名称
     name = '首页'
 
+    def refresh_page(self):
+        self.refresh_element(is_logger=False)
+
     def get_user_name(self):
         """
         获取当前用户的用户名。
@@ -141,7 +144,7 @@ class HomePage(BasePage):
             # 重试最多3次
             while 0 < retry_count <= 3:
                 self.logger.info(f'重试次数：{retry_count}次')
-                self._script_element_hire_list(job_count)  # 滑动招聘列表到当前列表中最后
+                self._script_element_hire_list()  # 滑动招聘列表到当前列表中最后
                 time_sleep()  # 加入等待时间
                 job_count = self._get_hire_count()  # 重新获取当前招聘数量
                 # 如果数量仍然没有变化，增加重试次数
@@ -150,7 +153,7 @@ class HomePage(BasePage):
                     retry_count += 1
                 else:
                     # 如果数量变化，重置重试次数并跳出循环
-                    retry_count = 1
+                    retry_count = 0
                     break
 
             # 如果重试次数超过3次，结束操作
@@ -161,14 +164,6 @@ class HomePage(BasePage):
 
             # 遍历新的招聘启事，从新获取的招聘中开始遍历
             for number in range(1 + old_job_count, job_count + 1):
-
-                # 尝试点击招聘选项
-                self._click_hire_option(number)
-
-                # 滑动招聘列表
-                self._script_element_hire_list(number)
-
-                time_sleep()
 
                 title_text = self._get_hire_title(number)  # 获取招聘的标题
                 company_name = self._get_hire_company(number)  # 获取招聘的公司名称
@@ -221,6 +216,16 @@ class HomePage(BasePage):
                         self.logger.info(
                             f'{company_name}招聘: {title_text}不符合期望, 公司名称包含关键字: {failCompanyText}')
                         break
+
+                # 尝试点击招聘选项
+                self._click_hire_option(number)
+
+                time_sleep()
+
+                # 滚动招聘详情组件
+                self._script_element_hire_detail()
+
+                time_sleep()
 
                 try:
                     # 获取招聘者状态并检查是否符合期望
@@ -548,7 +553,7 @@ class HomePage(BasePage):
             is_logger=False,
         ).click_element()
 
-    def _script_element_hire_list(self, number):
+    def _script_element_hire_list(self):
         """
         滑动招聘列表直到指定的招聘选项可见，并执行脚本操作使该元素成为活动元素。
 
@@ -559,18 +564,15 @@ class HomePage(BasePage):
         无直接返回值，但通过链式调用最终调用了script_element方法。
         """
         # 等待指定的招聘选项可见，并执行滑动操作。这里不记录日志是为了避免不必要的输出干扰。
-        self.wait_element_is_visible(
-            locator=Loc.hire_option_locator(number),
-            action='滑动招聘列表',
-            is_logger=False,
-        ).script_element()
+        self.script_windows_element(is_logger=False)
+
 
     def _script_element_hire_detail(self):
         self.wait_element_is_visible(
             locator=Loc.hire_detail_msg_container_locator,
             action='滑动招聘详情',
             is_logger=False,
-        ).script_element()
+        ).script_specify_element()
 
     def _get_navigation_bar_recommend_class(self):
         return self.wait_element_is_visible(

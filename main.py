@@ -15,6 +15,7 @@ if __name__ == '__main__':
         args.insert(0, '-m {}'.format(arg))
     arg = get_opts('--browser')
     if arg:
+
         args.insert(0, '--browser=={}'.format(arg))  # 坑：这里只能写key=value的形式，不要用空格
     # 运行代码并生成测试报告
     pytest.main(args)
