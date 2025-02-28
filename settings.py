@@ -47,7 +47,7 @@ TEXT_MAPPINGS = {
 
 PASS_EDUCATION_BACKGROUNDS = ['大专', '本科']
 
-SALARY_EXPECTATION = 18  # 期望薪资，单位为k
+SALARY_EXPECTATION = 16  # 期望薪资，单位为k
 
 FAIL_TEXTS = [
     '统招',
@@ -64,6 +64,9 @@ FAIL_TEXTS = [
     '游戏',
     '证券',
     '金融',
+    '借贷',
+    '信贷',
+    '安全测试',
 ]
 
 PASS_TITLE_TEXTS = [
@@ -73,12 +76,13 @@ PASS_TITLE_TEXTS = [
 FAIL_TITLE_TEXTS = [
     '主管',
     '负责人',
-    '组长',
+    # '组长',
     '经理',
 ]
 
 FAIL_COMPANIES = [
     '拓保',
+    '跨越速运',
 ]
 
 PASS_RECRUITER_STATES = [
