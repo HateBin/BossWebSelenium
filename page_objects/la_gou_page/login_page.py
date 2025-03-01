@@ -1,12 +1,12 @@
 from page_objects.base_page import BasePage
-from page_locators.login_page_locators import LoginPageLocators as Loc
+from page_locators.la_gou_locators.login_page_locators import LoginPageLocators as Loc
 
 class LoginPage(BasePage):
     '''
     把一个页面抽象成一个类，所有这个页面上的功能封装成方法
     '''
     # 页面名称
-    name = '登录页面'
+    name = '拉勾登录页面'
 
     def go_to_login(self):
         """
@@ -16,7 +16,7 @@ class LoginPage(BasePage):
         等待跳转按钮出现并变得可见，然后点击该按钮以导航到登录页面。
         """
         self.wait_element_is_visible(
-            locator=Loc.go_to_login_button_locator, action='点击跳转登录页按钮'
+            locator=Loc.go_to_login_button_locator, action='点击打开登录弹窗'
         ).click_element()
 
     def click_wechat_login(self):
@@ -26,5 +26,5 @@ class LoginPage(BasePage):
         该方法使用显式等待来确保微信登录按钮可见，然后点击该按钮。
         """
         self.wait_element_is_visible(
-            locator=Loc.wechat_login_button_locator, action='点击微信登录按钮'
+            locator=Loc.wechat_login_button_locator, action='点击切换微信登录'
         ).click_element()

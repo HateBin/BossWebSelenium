@@ -6,13 +6,13 @@
 """
 import settings
 from page_objects.base_page import BasePage
-from page_locators.home_page_locators import HomePageLocators as Loc
+from page_locators.boss_locators.home_page_locators import HomePageLocators as Loc
 from common.tools import text_mapping_switch, regular_expression, time_sleep, update_communicate_count
 
 
 class HomePage(BasePage):
     # 页面名称
-    name = '首页'
+    name = 'BOSS首页'
 
     def refresh_page(self):
         self.refresh_element(is_logger=False)
@@ -168,10 +168,11 @@ class HomePage(BasePage):
                 title_text = self._get_hire_title(number)  # 获取招聘的标题
                 company_name = self._get_hire_company(number)  # 获取招聘的公司名称
                 salary: tuple = self._get_hire_salary(number)  # 获取招聘的薪资，tuple[0]为最低，tuple[1]为最高
+                salary_str = f'{salary[0]}-{salary[1]}k'
 
                 # 如果薪资不符合期望，跳过
                 if salary[1] < settings.SALARY_EXPECTATION:
-                    self.logger.info(f'{company_name}招聘: {title_text}薪资{salary[0]}-{salary[1]}k, 不符合期望')
+                    self.logger.info(f'{company_name}招聘: {title_text}薪资{salary_str}, 不符合期望')
                     continue
 
                 # 如果招聘的子元素大于等于3个（则表示该招聘子元素存在标签）
@@ -287,7 +288,7 @@ class HomePage(BasePage):
                     update_communicate_count(add=1)
 
                     self._click_communicate_pop_return()  # 点击留在此页
-                    self.logger.debug(f'{company_name}招聘: {title_text}已完成立即沟通')
+                    self.logger.debug(f'{company_name}招聘: {title_text}, 薪资{salary_str}, 已完成立即沟通')
                     time_sleep()
 
             # 更新旧的招聘数量

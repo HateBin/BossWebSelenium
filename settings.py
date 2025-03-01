@@ -7,7 +7,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEST_CASE_DIR = os.path.join(BASE_DIR, 'test_cases')
 
 # 项目域名
-PROJECT_HOST = 'https://www.zhipin.com/'
+BOSS_HOST = 'https://www.zhipin.com/'
+LA_GOU_HOST = 'https://www.zhipin.com/'
 
 # url信息
 INTERFACE = {
