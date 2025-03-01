@@ -285,7 +285,7 @@ class HomePage(BasePage):
                     return_data['communicateCount'] += 1  # 记录沟通次数
 
                     # 更新yaml文件的历史沟通次数
-                    update_communicate_count(add=1)
+                    update_communicate_count(count_type='boss', add=1)
 
                     self._click_communicate_pop_return()  # 点击留在此页
                     self.logger.debug(f'{company_name}招聘: {title_text}, 薪资{salary_str}, 已完成立即沟通')

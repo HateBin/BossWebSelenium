@@ -127,21 +127,22 @@ def yaml_write(yaml_name, yaml_key, content, dic_name=None):
         yaml.dump(yaml_r, f, default_flow_style=False, allow_unicode=True)
     return 200
 
-def update_communicate_count(update: int = None, add: int = None):
+def update_communicate_count(count_type: str, update: int = None, add: int = None):
     current_date = get_date('%Y-%m-%d')
     if update:
-        yaml_write('communicate_record', current_date, str(update))
+        yaml_write('communicate_record', [count_type, current_date], str(update))
     if add:
-        current_count = yaml_read('communicate_record', current_date)
+        current_data = yaml_read('communicate_record')
+        current_count = current_data[count_type].get(current_date)
         if not current_count:
             current_count = 0
-            yaml_write('communicate_record', current_date, '0')
+            yaml_write('communicate_record', [count_type, current_date], '0')
         current_count = int(current_count) + add
-        yaml_write('communicate_record', current_date, str(current_count))
+        yaml_write('communicate_record', [count_type, current_date], str(current_count))
 
 
 if __name__ == '__main__':
     # exp = r'^(\d+)-(\d+)'
     # print(regular_expression(exp, '12-24K·13薪'))
     # print(regular_expression(exp, '11000-16000元/月'))
-    update_communicate_count(add=1)
+    update_communicate_count(count_type='laGou', add=1)
