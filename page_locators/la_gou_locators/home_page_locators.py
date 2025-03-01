@@ -7,9 +7,13 @@
 
 class HomePageLocators:
     # 登录用户名定位
-    user_name_locator = ('xpath', '/html/body/div[1]/div[1]/div/div/div[1]/div[3]/ul/li[2]/a/span')
-    # 职位选项容器定位
-    job_options_locator = ('xpath', '/html/body/div[1]/div[2]/div[1]/div/div[1]')
+    user_name_locator = ('xpath', '/html/body/div/header/div[1]/div[2]/ul/li[5]/div[1]/span')
+
+    # 首页搜索框定位
+    home_search_box_locator = ('xpath', '/html/body/div[1]/div[2]/div[1]/div[1]/div/div/form/input[1]')
+
+    # 首页搜索按钮定位
+    home_search_button_locator = ('xpath', '/html/body/div[1]/div[2]/div[1]/div[1]/div/div/form/input[2]')
 
     # 职位选项定位
     @staticmethod

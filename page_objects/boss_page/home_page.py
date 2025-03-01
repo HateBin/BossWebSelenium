@@ -29,7 +29,7 @@ class HomePage(BasePage):
         # 等待用户名元素可见，最大等待时间为600秒
         self.wait_element_is_visible(
             locator=Loc.user_name_locator,
-            timeout=600,
+            timeout=settings.LOGIN_TIMEOUT,
             action='获取用户名'
         )
         try:

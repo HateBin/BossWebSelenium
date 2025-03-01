@@ -15,6 +15,7 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 
 import settings
+import random
 from common import logger
 
 
@@ -49,12 +50,18 @@ class BasePage:
         self.action = ''
         self.isLogger = False
 
-    def delay(self, second=0.5):
+    def delay(self, second=None):
         '''
         延时操作
         :param second:秒  支持浮点数
         :return:
         '''
+        if not second:
+            operation_interval = settings.OPERATION_INTERVAL
+            if isinstance(operation_interval, list):
+                second = random.uniform(operation_interval[0], operation_interval[1])
+            else:
+                second = operation_interval
         time.sleep(second)
         # 定义返回对象，用于链式编程
         # 如：wait_element_is_visible(('xpath', '//input[@name="username"]'),action='输入用户名').delay(3).send_keys('11111')

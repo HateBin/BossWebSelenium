@@ -8,7 +8,7 @@ TEST_CASE_DIR = os.path.join(BASE_DIR, 'test_cases')
 
 # 项目域名
 BOSS_HOST = 'https://www.zhipin.com/'
-LA_GOU_HOST = 'https://www.zhipin.com/'
+LA_GOU_HOST = 'https://www.lagou.com/wn/'
 
 # url信息
 INTERFACE = {
@@ -29,6 +29,9 @@ OPERATION_INTERVAL = [1, 3]
 
 # 全局查找默认等待时间
 DEFAULT_TIMEOUT = 3
+
+# 登录等待时间, 秒为单位
+LOGIN_TIMEOUT = 600
 
 # 错误截屏保存路径
 ERROR_SCREENSHOT_DIR = os.path.join(BASE_DIR, 'screen_shot')
