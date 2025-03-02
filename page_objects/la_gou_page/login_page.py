@@ -21,7 +21,7 @@ class LoginPage(BasePage):
         等待跳转按钮出现并变得可见，然后点击该按钮以导航到登录页面。
         """
         self.wait_element_to_be_clickable(
-            locator=Loc.go_to_login_button_locator, action='点击打开登录弹窗'
+            locator=Loc.go_to_login_button_locator, action='点击打开登录弹窗', is_logger=False
         ).delay().click_element()
 
     def _click_wechat_login(self):
@@ -31,5 +31,5 @@ class LoginPage(BasePage):
         该方法使用显式等待来确保微信登录按钮可见，然后点击该按钮。
         """
         self.wait_element_to_be_clickable(
-            locator=Loc.wechat_login_button_locator, action='点击切换微信登录'
+            locator=Loc.wechat_login_button_locator, action='点击切换微信登录', is_logger=False
         ).click_element()

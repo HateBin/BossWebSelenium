@@ -328,14 +328,18 @@ class BasePage:
             # 私有方法，仅在内部可调用
             self.__clear_cache()
 
-    def script_windows_element(self, is_logger: bool = True):
+    def script_windows_element(self, script_type: str ,is_logger: bool = True):
         '''
         滚动主体滚动条
         :return:
         '''
         try:
+            js = ''
             # 执行操作
-            js = 'window.scrollTo(0, document.body.scrollHeight);'
+            if script_type == 'top':
+                js = 'window.scrollTo(0, 0);'
+            elif script_type == 'bottom':
+                js = 'window.scrollTo(0, document.body.scrollHeight);'
             self.driver.execute_script(js)
         except Exception as e:
             # 定义操作失败日志
@@ -355,7 +359,7 @@ class BasePage:
             # 私有方法，仅在内部可调用
             self.__clear_cache()
 
-    def script_specify_element(self):
+    def script_specify_element(self, top: int = None, is_end_block: bool = False):
         '''
         滚动指定元素的滚动条
         :return:
@@ -365,7 +369,10 @@ class BasePage:
             raise RuntimeError('不能在wait方法之前调用元素上的方法')
         try:
             # 执行操作
-            js = 'arguments[0].scrollTop = arguments[0].scrollHeight;'
+            # js = 'arguments[0].scrollTop = arguments[0].scrollHeight;'
+            js = "arguments[0].scrollIntoView({});".format("{behavior: 'smooth', block: 'end'}" if is_end_block else '')
+            if top is not None:
+                js += f'window.scrollBy(0, -{top});'
             self.driver.execute_script(js, self.element)
         except Exception as e:
             # 定义操作失败日志
@@ -608,11 +615,10 @@ class BasePage:
         finally:
             self.__clear_cache()
 
-    def switch_to_new_window(self, handle=None, action=''):
+    def switch_to_new_window(self, handle=None, is_logger: bool = True):
         '''
         切换到新的窗口
         :param handle:窗口句柄
-        :param action:
         :return:
         '''
         try:
@@ -633,13 +639,63 @@ class BasePage:
                 '在{},{}操作的时候，切换到窗口{}【失败】'.format(self.name, self.action, handle)
             )
             # 报错时截屏
-            self.get_page_screenshot(action)
+            self.get_page_screenshot('切换新的窗口')
             raise e
         else:
-            if self.isLogger:
+            if is_logger:
                 self.logger.exception(
                     '在{},{}操作的时候，切换到窗口{}【成功】'.format(self.name, self.action, handle)
                 )
+
+    def close_current_window_element(self, is_logger: bool = True):
+        try:
+            self.driver.close()
+        except Exception as e:
+            self.logger.exception(
+                '在{}, 关闭当前窗口【失败】'.format(self.name)
+            )
+            # 报错时截屏
+            self.get_page_screenshot('关闭当前窗口')
+            raise e
+        else:
+            if is_logger:
+                self.logger.exception(
+                    '在{}, 关闭当前窗口【成功】'.format(self.name)
+                )
+
+    def get_windows_handles_element(self, is_logger: bool = True):
+        try:
+            all_handles = self.driver.window_handles
+        except Exception as e:
+            self.logger.exception(
+                '在{}, 获取窗口句柄【失败】'.format(self.name)
+            )
+            # 报错时截屏
+            self.get_page_screenshot('获取所有窗口句柄')
+            raise e
+        else:
+            if is_logger:
+                self.logger.exception(
+                    '在{}, 获取窗口句柄【成功】'.format(self.name)
+                )
+            return all_handles
+
+    def current_url_element(self, is_logger: bool = True):
+        try:
+            url = self.driver.current_url
+        except Exception as e:
+            self.logger.exception(
+                '在{}, 获取url【失败】'.format(self.name)
+            )
+            # 报错时截屏
+            self.get_page_screenshot('获取所有窗口句柄')
+            raise e
+        else:
+            if is_logger:
+                self.logger.exception(
+                    '在{}, url【成功】'.format(self.name)
+                )
+            return url
 
     def get_page_screenshot(self, action):
         '''

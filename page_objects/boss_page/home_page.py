@@ -565,7 +565,7 @@ class HomePage(BasePage):
         无直接返回值，但通过链式调用最终调用了script_element方法。
         """
         # 等待指定的招聘选项可见，并执行滑动操作。这里不记录日志是为了避免不必要的输出干扰。
-        self.script_windows_element(is_logger=False)
+        self.script_windows_element(script_type='bottom', is_logger=False)
 
 
     def _script_element_hire_detail(self):

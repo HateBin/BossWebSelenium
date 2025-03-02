@@ -35,7 +35,7 @@ class TestAutomatedCommunication(BaseCase):
         is_break = False
 
         # 访问项目主页
-        driver.get(settings.BOSS_HOST)
+        driver.get(settings.PROJECT_HOSTS['boss'])
 
         # 实例化登录页和主页对象
         lp = LoginPage(driver)
@@ -107,10 +107,11 @@ class TestAutomatedCommunication(BaseCase):
 
         # 初始化计数器和控制变量
         count = 0
+        is_last_page = False
         is_break = False
 
         # 访问项目主页
-        driver.get(settings.LA_GOU_HOST)
+        driver.get(settings.PROJECT_HOSTS['laGou'])
 
         # 实例化登录页和主页对象
         lp = LoginPage(driver)
@@ -127,46 +128,25 @@ class TestAutomatedCommunication(BaseCase):
 
         hop.query_job()
 
-        hip.select_degree()
+        hip.selected()
 
-        #
-        # # 获取所有职位选项
-        # jobs = hp.get_job_options()
-        # job_index = 0
-        # while True:
-        #     job = jobs[job_index]
-        #     # 遍历每个职位选项
-        #     while True:
-        #         # 点击职位选项
-        #         hp.click_job_options(job)
-        #
-        #         # 进行沟通并获取结果
-        #         result = hp.communicate()
-        #
-        #         # 获取沟通次数并累加到总次数
-        #         communicate_count = result['communicateCount']
-        #         count += communicate_count
-        #
-        #         if result['isGoToChat']:
-        #             continue
-        #
-        #         # 如果需要中断循环，则设置标志变量并跳出循环
-        #         if result['switchJob'] or result['isBreak']:
-        #             if result['isBreak']:
-        #                 is_break = True
-        #             break
-        #     if is_break:
-        #         break
-        #     if job_index + 1 == len(jobs):
-        #         job_index = 0
-        #         hp.refresh_page()
-        #     else:
-        #         job_index += 1
-        # # 根据is_break的值，记录不同的结束信息
-        # if is_break:
-        #     self.logger.info(f'自动化沟通结束, 今天的沟通次数已用完, 总共沟通次数为: {count}')
-        # else:
-        #     self.logger.info(f'自动化沟通结束, 今天的沟通次数未用完, 总共沟通次数为: {count}')
+        while True:
+
+            current_page_hire_count = hip.get_hire_options_count()
+
+            result: dict = hip.communicate(current_page_hire_count)
+
+            count += result['communicateCount']
+
+            if hip.current_is_last_page():
+                break
+            else:
+                hip.click_next_page()
+
+        self.logger.info(f'自动化执行完毕，沟通次数为: {count}')
+
+
+
 
 
 

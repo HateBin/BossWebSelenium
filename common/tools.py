@@ -6,6 +6,7 @@ import random
 import os
 import yaml
 import datetime
+import urllib.parse
 
 
 def get_opts(name):
@@ -140,9 +141,35 @@ def update_communicate_count(count_type: str, update: int = None, add: int = Non
         current_count = int(current_count) + add
         yaml_write('communicate_record', [count_type, current_date], str(current_count))
 
+def convert_page_path_to_url_and_params(page_path):
+    path_data = {}
+    page_path = page_path.replace(' ', '')
+    for host in settings.PROJECT_HOSTS.values():
+        if page_path.startswith(host):
+            page_path = page_path.replace(host, '')
+            break
+    if '?' not in page_path or page_path.endswith('?'):
+        if page_path.endswith('?'):
+            page_path = page_path.replace('?', '')
+        path_data['url'] = page_path
+        return path_data
+    page_path_list = page_path.split('?')
+    path_data['url'] = page_path_list[0]
+    path_data['params'] = {}
+    path_params_str = page_path_list[1]
+    if '&' in path_params_str:
+        path_params_list = path_params_str.split('&')
+    else:
+        path_params_list = [path_params_str]
+    for path_params in path_params_list:
+        path_params_key_value = path_params.split('=')
+        # decoded_value = urllib.parse.unquote(urllib.parse.unquote(path_params_key_value[1]))
+        path_data['params'][path_params_key_value[0]] = path_params_key_value[1]
+    return path_data
 
 if __name__ == '__main__':
-    # exp = r'^(\d+)-(\d+)'
-    # print(regular_expression(exp, '12-24K·13薪'))
+    exp = r'^(.*?)\[.+\]$'
+    print(regular_expression(exp, '软件测试工程师[南山区]'))
     # print(regular_expression(exp, '11000-16000元/月'))
-    update_communicate_count(count_type='laGou', add=1)
+    # update_communicate_count(count_type='laGou', add=1)
+    # print(convert_page_path_to_url_and_params('https://www.lagou.com/wn/zhaopin?fromSearch=true&kd=%25E8%25BD%25AF%25E4%25BB%25B6%25E6%25B5%258B%25E8%25AF%2595&city=%E6%B7%B1%E5%9C%B3&a='))
