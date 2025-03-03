@@ -10,7 +10,8 @@ class HirePageLocators:
     salary_15_25_locator = (
         'xpath', '/html/body/div/div[2]/div/div[2]/div[1]/div[1]/div[2]/div/ul/li[3]/div/div/ul[2]/li[5]')
 
-    hire_options_container_locator = ('xpath', '/html/body/div[1]/div[2]/div/div[2]/div[3]/div/div[1]')
+    # hire_options_container_locator = ('xpath', '/html/body/div[1]/div[2]/div/div[2]/div[3]/div/div[1]')
+    hire_options_container_locator = ('xpath', '//div[@class="list__YibNq"]')
 
     hire_pager_container_locator = ('xpath', '/html/body/div[1]/div[2]/div/div[3]/div[3]/div/div[3]/ul')
 

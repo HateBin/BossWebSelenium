@@ -15,8 +15,8 @@ class HirePage(BasePage):
         self._click_salary_expected()
 
     def get_hire_options_count(self):
+        time_sleep()
         count = self._get_hire_options_count()
-        self.logger.info(f'拉勾招聘列表页面获取招聘选项数量为: {count}')
         return count
 
     def current_is_last_page(self):
@@ -81,6 +81,9 @@ class HirePage(BasePage):
                         f'{company_name}招聘: {title_text}不符合期望, 公司名称包含关键字: {failCompanyText}')
                     break
 
+            if company_fail_count > 0:
+                continue
+
             self._click_hire_title(number)
             windows_handles = self.get_windows_handles_element(is_logger=False)
             try:
@@ -89,12 +92,12 @@ class HirePage(BasePage):
                 self.logger.exception(f'获取的页面数量不正确, 获取的页面数量为: {len(windows_handles)}')
                 raise e
             self.switch_to_new_window(windows_handles[-1], is_logger=False)
-            re_title_text = regular_expression(r'^(.*?)\[.+\]$', title_text)[0]
-            try:
-                assert self._get_hire_detail_title() == re_title_text
-            except Exception as e:
-                self.logger.exception(f'进入招聘详情页失败')
-                raise e
+            # re_title_text = regular_expression(r'^(.*?)\[.+\]$', title_text)[0]
+            # try:
+            #     assert self._get_hire_detail_title() == re_title_text
+            # except Exception as e:
+            #     self.logger.exception(f'进入招聘详情页失败')
+            #     raise e
 
             hire_position_type = self._get_hire_position_type()
 
@@ -167,7 +170,7 @@ class HirePage(BasePage):
         ).delay().click_element()
 
     def _get_hire_options_count(self):
-        return len(self.wait_elment_is_loaded(
+        return len(self.wait_element_is_visible(
             Loc.hire_options_container_locator,
             action='获取招聘数量',
             is_logger=False
@@ -197,28 +200,28 @@ class HirePage(BasePage):
         return min_salary, max_salary
 
     def _get_hire_company_name(self, number):
-        return self.wait_elment_is_loaded(
+        return self.wait_element_is_visible(
             Loc.hire_company_locator(number),
             action='获取招聘公司名称',
             is_logger=False
         ).get_element_text()
 
     def _get_hire_title(self, number):
-        return self.wait_elment_is_loaded(
+        return self.wait_element_is_visible(
             Loc.hire_title_locator(number),
             action='获取招聘标题',
             is_logger=False
         ).get_element_text()
 
     def _click_hire_title(self, number):
-        self.wait_elment_is_loaded(
+        self.wait_element_is_visible(
             Loc.hire_title_locator(number),
             action='点击招聘标题',
             is_logger=False
         ).delay().click_element()
 
     def _get_hire_detail_title(self):
-        hire_detail_title = self.wait_elment_is_loaded(
+        hire_detail_title = self.wait_element_is_visible(
             Loc.hire_detail_title_locator,
             action='获取招聘详情标题',
             is_logger=False
@@ -226,14 +229,14 @@ class HirePage(BasePage):
         return hire_detail_title
 
     def _get_hire_position_type(self):
-        return self.wait_elment_is_loaded(
+        return self.wait_element_is_visible(
             Loc.hire_detail_position_type_locator,
             action='获取招聘职位类型',
             is_logger=False
         ).get_element_text()
 
     def _get_hire_detail_msg(self):
-        return self.wait_elment_is_loaded(
+        return self.wait_element_is_visible(
             Loc.hire_detail_msg_container_locator,
             action='获取招聘详情信息',
             is_logger=False

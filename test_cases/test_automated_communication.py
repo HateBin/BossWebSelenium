@@ -107,8 +107,6 @@ class TestAutomatedCommunication(BaseCase):
 
         # 初始化计数器和控制变量
         count = 0
-        is_last_page = False
-        is_break = False
 
         # 访问项目主页
         driver.get(settings.PROJECT_HOSTS['laGou'])
@@ -128,7 +126,7 @@ class TestAutomatedCommunication(BaseCase):
 
         hop.query_job()
 
-        hip.selected()
+        # hip.selected()
 
         while True:
 

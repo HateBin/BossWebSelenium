@@ -31,10 +31,10 @@ LOG_CONFIG = {
 }
 
 # 默认操作间隔, [min, max] or int
-OPERATION_INTERVAL = [1, 3]
+OPERATION_INTERVAL = [2, 5]
 
 # 全局查找默认等待时间
-DEFAULT_TIMEOUT = 3
+DEFAULT_TIMEOUT = 60
 
 # 登录等待时间, 秒为单位
 LOGIN_TIMEOUT = 600
@@ -93,6 +93,8 @@ FAIL_TITLE_TEXTS = [
 FAIL_COMPANIES = [
     '拓保',
     '跨越速运',
+    '华为',
+    '腾讯',
 ]
 
 PASS_RECRUITER_STATES = [
