@@ -144,7 +144,7 @@ class HomePage(BasePage):
             # 重试最多3次
             while 0 < retry_count <= 3:
                 self.logger.info(f'重试次数：{retry_count}次')
-                self._script_element_hire_list()  # 滑动招聘列表到当前列表中最后
+                self._script_hire_list_bottom()  # 滑动招聘列表到当前列表中最后
                 time_sleep()  # 加入等待时间
                 job_count = self._get_hire_count()  # 重新获取当前招聘数量
                 # 如果数量仍然没有变化，增加重试次数
@@ -210,13 +210,18 @@ class HomePage(BasePage):
                 if title_fail_count > 0:  # 如果存在不期望的关键字在标题中时，则跳过
                     continue
 
-                company_fail_count = 0
+                is_fail_company = False
                 for failCompanyText in settings.FAIL_COMPANIES:
                     if failCompanyText in company_name:  # 如果公司名称包含不期望的关键字，则记录company_fail_count数量并且终止循环
-                        company_fail_count += 1
+                        is_fail_company = True
                         self.logger.info(
                             f'{company_name}招聘: {title_text}不符合期望, 公司名称包含关键字: {failCompanyText}')
                         break
+
+                if is_fail_company:  # 如果存在不期望的关键字在公司名称中时，则跳过
+                    continue
+
+                self._script_hire_visible_element(number)
 
                 # 尝试点击招聘选项
                 self._click_hire_option(number)
@@ -403,7 +408,7 @@ class HomePage(BasePage):
             locator=Loc.hire_option_locator(number),
             action='点击招聘选项',
             is_logger=False,
-        ).click_element()
+        ).delay().click_element()
 
     def _get_hire_sub_element_count(self, number):
         """
@@ -554,7 +559,10 @@ class HomePage(BasePage):
             is_logger=False,
         ).click_element()
 
-    def _script_element_hire_list(self):
+    def _script_hire_list_bottom(self):
+        self.script_windows_element(script_type='bottom', is_logger=False)
+
+    def _script_hire_visible_element(self, number):
         """
         滑动招聘列表直到指定的招聘选项可见，并执行脚本操作使该元素成为活动元素。
 
@@ -565,7 +573,11 @@ class HomePage(BasePage):
         无直接返回值，但通过链式调用最终调用了script_element方法。
         """
         # 等待指定的招聘选项可见，并执行滑动操作。这里不记录日志是为了避免不必要的输出干扰。
-        self.script_windows_element(script_type='bottom', is_logger=False)
+        self.wait_elment_is_loaded(
+            locator=Loc.hire_option_locator(number),
+            action='滑动招聘列表直到指定招聘选项可见',
+            is_logger=False,
+        ).script_specify_element(is_end_block=True)
 
 
     def _script_element_hire_detail(self):

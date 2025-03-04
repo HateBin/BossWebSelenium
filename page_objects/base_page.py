@@ -369,10 +369,12 @@ class BasePage:
             raise RuntimeError('不能在wait方法之前调用元素上的方法')
         try:
             # 执行操作
-            # js = 'arguments[0].scrollTop = arguments[0].scrollHeight;'
-            js = "arguments[0].scrollIntoView({});".format("{behavior: 'smooth', block: 'end'}" if is_end_block else '')
-            if top is not None:
-                js += f'window.scrollBy(0, -{top});'
+            if not is_end_block:
+                js = 'arguments[0].scrollTop = arguments[0].scrollHeight;'
+                if top is not None:
+                    js += f'window.scrollBy(0, -{top});'
+            else:
+                js = "arguments[0].scrollIntoView({behavior: 'smooth', block: 'end'});"
             self.driver.execute_script(js, self.element)
         except Exception as e:
             # 定义操作失败日志
