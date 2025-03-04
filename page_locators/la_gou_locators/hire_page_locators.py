@@ -1,5 +1,4 @@
 class HirePageLocators:
-
     select_degree_locator = ('xpath', '/html/body/div/div[2]/div/div[2]/div[1]/div[1]/div[2]/div/ul/li[2]/div')
 
     associate_degree_locator = (
@@ -42,6 +41,13 @@ class HirePageLocators:
             f'(//div[@class="company-name__2-SjF"])[{number}]',
         )
 
+    # 招聘标题容器定位
+    @staticmethod
+    def hire_title_container_locator(number):
+        return (
+            'xpath', f'(//div[@class="p-top__1F7CL"])[{number}]',
+        )
+
     # 招聘标题定位
     @staticmethod
     def hire_title_locator(number):
@@ -50,6 +56,10 @@ class HirePageLocators:
             # f'/html/body/div/div[2]/div/div[3]/div[3]/div/div[1]/div[{number}]/div[1]/div[1]/div[1]/a',
             f'(//a[@id="openWinPostion"])[{number}]',
         )
+
+    @staticmethod
+    def hire_label_locator(number):
+        return 'xpath', f'(//img[@class="mark__1R1zT"])[{number}]'
 
     # hire_detail_title_locator = ('xpath', '/html/body/div[1]/div[2]/div[1]/div/div[1]/div[1]/h1/span/span/span[1]')
     hire_detail_title_locator = ('xpath', '//span[@class="position-head-wrap-position-name"]')
@@ -66,4 +76,3 @@ class HirePageLocators:
     communicate_pop_return_button_locator = ('xpath', '/html/body/div[5]/div/div[2]/div/div[2]/div/div/button/span')
 
     submit_resume_pop_return_button_locator = ('xpath', '/html/body/div[5]/div/div[2]/div/div[2]/div[2]/button[2]')
-

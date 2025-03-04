@@ -57,7 +57,7 @@ TEXT_MAPPINGS = {
 
 PASS_EDUCATION_BACKGROUNDS = ['大专', '本科']
 
-SALARY_EXPECTATION = 16  # 期望薪资，单位为k
+SALARY_EXPECTATION = 15  # 期望薪资，单位为k
 
 FAIL_TEXTS = [
     '统招',
@@ -106,4 +106,10 @@ PASS_RECRUITER_STATES = [
 FAIL_HIRE_LABELS = [
     '猎头',
     '派遣',
+]
+
+LA_GOU_POSITION_TYPES = [
+    '测试工程师',
+    '自动化测试',
+    '测试开发',
 ]

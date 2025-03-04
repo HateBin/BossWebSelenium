@@ -6,6 +6,7 @@
 """
 
 from test_cases.base_case import BaseCase
+from common.tools import rest_time
 import pytest
 import settings
 
@@ -78,6 +79,7 @@ class TestAutomatedCommunication(BaseCase):
             if job_index + 1 == len(jobs):
                 job_index = 0
                 hp.refresh_page()
+                rest_time()
             else:
                 job_index += 1
         # 根据is_break的值，记录不同的结束信息
@@ -115,8 +117,6 @@ class TestAutomatedCommunication(BaseCase):
         lp = LoginPage(driver)
         hop = HomePage(driver)
         hip = HirePage(driver)
-
-
 
         # 登录
         lp.login()

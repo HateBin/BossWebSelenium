@@ -1,7 +1,7 @@
 import settings
 from page_objects.base_page import BasePage
 from page_locators.la_gou_locators.hire_page_locators import HirePageLocators as Loc
-from common.tools import regular_expression, update_communicate_count, time_sleep
+from common.tools import regular_expression, update_communicate_count, time_sleep, get_online_image_name
 
 
 class HirePage(BasePage):
@@ -44,6 +44,12 @@ class HirePage(BasePage):
             salary_str = f'{salary[0]}-{salary[1]}k'
             company_name = self._get_hire_company_name(number)
             title_text = self._get_hire_title(number)
+
+            if self._get_hire_title_container_sub_element_count == 2:
+                hire_label_src = self._get_hire_label_src(number)
+                if get_online_image_name(hire_label_src) == 'yitou':
+                    self.logger.info(f'{company_name}招聘: {title_text}已经投过简历了')
+                    continue
 
             # 如果薪资不符合期望，跳过
             if salary[1] < settings.SALARY_EXPECTATION:
@@ -101,7 +107,7 @@ class HirePage(BasePage):
 
             hire_position_type = self._get_hire_position_type()
 
-            if hire_position_type not in ('测试工程师', '自动化测试'):
+            if hire_position_type not in settings.LA_GOU_POSITION_TYPES:
                 self.logger.info(
                     f'{company_name}招聘: {title_text}不符合期望, 职位类型不符合期望: {hire_position_type}')
                 self._close_hire_detail_page(windows_handles)
@@ -124,8 +130,6 @@ class HirePage(BasePage):
             communicate_button_text = self._get_communicate_button_text()
 
             self._click_communicate_button()
-
-
 
             if communicate_button_text == '立即沟通':
                 self.logger.debug(f'{company_name}招聘: {title_text}已进行沟通')
@@ -205,6 +209,20 @@ class HirePage(BasePage):
             action='获取招聘公司名称',
             is_logger=False
         ).get_element_text()
+
+    def _get_hire_title_container_sub_element_count(self, number):
+        return len(self.wait_element_is_visible(
+            Loc.hire_title_container_locator(number),
+            action='获取招聘标题容器下的子元素数量',
+            is_logger=False
+        ).get_child_elements())
+
+    def _get_hire_label_src(self, number):
+        return self.wait_element_is_visible(
+            Loc.hire_label_locator(number),
+            action='获取招聘标签的图片路径',
+            is_logger=False
+        ).get_element_attr('src')
 
     def _get_hire_title(self, number):
         return self.wait_element_is_visible(

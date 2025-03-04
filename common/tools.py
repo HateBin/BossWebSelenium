@@ -167,9 +167,22 @@ def convert_page_path_to_url_and_params(page_path):
         path_data['params'][path_params_key_value[0]] = path_params_key_value[1]
     return path_data
 
+def rest_time(minutes: list or tuple = None):
+    if not minutes:
+        minutes = [5, 30]
+    min_sec = minutes[0] * 60
+    max_sec = minutes[1] * 60
+    time.sleep(random.uniform(min_sec, max_sec))
+
+def get_online_image_name(online_image_path, is_format: bool = True):
+    online_image_name = online_image_path.split('/')[-1]
+    if not is_format:
+        online_image_name = online_image_name.split('.')[0]
+    return online_image_name
+
 if __name__ == '__main__':
-    exp = r'^(.*?)\[.+\]$'
-    print(regular_expression(exp, '软件测试工程师[南山区]'))
+    # exp = r'^(.*?)\[.+\]$'
+    # print(regular_expression(exp, '软件测试工程师[南山区]'))
     # print(regular_expression(exp, '11000-16000元/月'))
     # update_communicate_count(count_type='laGou', add=1)
-    # print(convert_page_path_to_url_and_params('https://www.lagou.com/wn/zhaopin?fromSearch=true&kd=%25E8%25BD%25AF%25E4%25BB%25B6%25E6%25B5%258B%25E8%25AF%2595&city=%E6%B7%B1%E5%9C%B3&a='))
+    print(get_online_image_name('https://lagou-zhaopin-fe.lagou.com/fed/lg-www-fed/position/pc/yitou.png', is_format=False))
