@@ -31,7 +31,7 @@ LOG_CONFIG = {
 }
 
 # 默认操作间隔, [min, max] or int
-OPERATION_INTERVAL = [2, 5]
+OPERATION_INTERVAL = [1, 3]
 
 # 全局查找默认等待时间
 DEFAULT_TIMEOUT = 60
@@ -59,6 +59,9 @@ PASS_EDUCATION_BACKGROUNDS = ['大专', '本科']
 
 SALARY_EXPECTATION = 15  # 期望薪资，单位为k
 
+IS_ACCEPT_HARDWARE = False  # 是否接受硬件
+IS_ACCEPT_BANKING_OR_FINANCE = False  # 是否接受银行或者金融
+
 FAIL_TEXTS = [
     '统招',
     '学信网',
@@ -68,20 +71,42 @@ FAIL_TEXTS = [
     '武汉',
     '珠海',
     '佛山',
-    '硬件',
+    '日本',
     '英语',
     '英文',
+    'english',
     '游戏',
+    '安全测试',
+    '可靠性',
+    '区块链',
+    '兼职',
+    '制造',
+]
+
+HARDWARE_TEXTS = [
+    '硬件',
+    '嵌入式',
+    '机器人',
+    '整机',
+    '无人机',
+    '蓝牙',
+    'iot',
+    '万用表',
+    '打印机',
+]
+
+BANKING_OR_FINANCE_TEXTS = [
+    '银行',
     '证券',
     '金融',
     '借贷',
     '信贷',
-    '安全测试',
 ]
 
-PASS_TITLE_TEXTS = [
-    '测试',
-]
+PASS_TITLE_TEXTS = {
+    'or': ['测试', 'qa', 'qe'],
+    'and': [],
+}
 
 FAIL_TITLE_TEXTS = [
     '主管',

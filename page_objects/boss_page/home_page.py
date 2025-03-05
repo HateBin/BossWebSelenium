@@ -8,6 +8,7 @@ import settings
 from page_objects.base_page import BasePage
 from page_locators.boss_locators.home_page_locators import HomePageLocators as Loc
 from common.tools import text_mapping_switch, regular_expression, time_sleep, update_communicate_count
+from common.public_method import assembly_fail_texts, check_pass_text
 
 
 class HomePage(BasePage):
@@ -188,22 +189,23 @@ class HomePage(BasePage):
                         continue
 
                 # 初始化标题通过和失败计数
-                title_pass_count = 0
                 title_fail_count = 0
 
-                # 检查标题是否包含所有期望的关键字
-                for passOption in settings.PASS_TITLE_TEXTS:  # 遍历期望存在的关键字
-                    if passOption in title_text:  # 如果关键字存在标题中则记录title_pass_count数量
-                        title_pass_count += 1
-                if title_pass_count != len(settings.PASS_TITLE_TEXTS):  # 如果记录的title_pass_count数量与期望的数量不一致，则跳过
+                check_pass_title = check_pass_text(title_text, 'title')
+
+                if not check_pass_title['state']:
+                    check_criteria = check_pass_title['type']
                     self.logger.info(
-                        f'{company_name}招聘: {title_text}不符合期望, 标题存在不包含关键字: {settings.PASS_TITLE_TEXTS}')
+                        f'{company_name}招聘: {title_text}不符合期望, 标题存在不包含关键字: {f" {check_criteria} ".join(check_pass_title["texts"])}')
                     continue
 
                 # 检查标题是否包含任何失败关键字
                 fail_title_texts = settings.FAIL_TEXTS + settings.FAIL_TITLE_TEXTS
+
+                assembly_fail_texts(fail_title_texts)
+
                 for failOption in fail_title_texts:  # 遍历不期望存在的关键字
-                    if failOption in title_text:  # 如果关键字存在标题中则记录title_fail_count数量并且终止循环
+                    if failOption in title_text.lower():  # 如果关键字存在标题中则记录title_fail_count数量并且终止循环
                         title_fail_count += 1
                         self.logger.info(f'{company_name}招聘: {title_text}不符合期望, 标题包含关键字: {failOption}')
                         break
@@ -257,10 +259,15 @@ class HomePage(BasePage):
                     continue
 
                 # 获取招聘详情并检查是否包含失败关键字
-                hire_detail_msg = self._get_hire_detail_msg()  # 获取招聘详情
+                hire_detail_msg: str = self._get_hire_detail_msg()  # 获取招聘详情
+
+                fail_texts = settings.FAIL_TEXTS
+
+                assembly_fail_texts(fail_texts)
+
                 is_fail_msg = False  # 用于表示招聘详情是否包含不期望存在的关键字
-                for failOption in settings.FAIL_TEXTS:  # 遍历不期望的关键字
-                    if failOption in hire_detail_msg:  # 如果详情描述中包含了不期望存在的关键字则记录is_fail_msg为True并终止循环
+                for failOption in fail_texts:  # 遍历不期望的关键字
+                    if failOption in hire_detail_msg.lower():  # 如果详情描述中包含了不期望存在的关键字则记录is_fail_msg为True并终止循环
                         is_fail_msg = True
                         self.logger.info(
                             f'{company_name}招聘: {title_text}不符合期望, 招聘详情包含了关键字: {failOption}')
@@ -578,7 +585,6 @@ class HomePage(BasePage):
             action='滑动招聘列表直到指定招聘选项可见',
             is_logger=False,
         ).script_specify_element(is_end_block=True)
-
 
     def _script_element_hire_detail(self):
         self.wait_element_is_visible(
