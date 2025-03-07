@@ -31,7 +31,10 @@ LOG_CONFIG = {
 }
 
 # 默认操作间隔, [min, max] or int
-OPERATION_INTERVAL = [1, 3]
+OPERATION_INTERVAL = [2, 3]
+
+# 休息时间范围[min, max]，单位是min，用于在执行完一轮操作后，进行休息
+REST_TIME_FRAME = [5, 10]
 
 # 全局查找默认等待时间
 DEFAULT_TIMEOUT = 60

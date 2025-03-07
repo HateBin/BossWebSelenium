@@ -228,12 +228,8 @@ class HomePage(BasePage):
                 # 尝试点击招聘选项
                 self._click_hire_option(number)
 
-                time_sleep()
-
                 # 滚动招聘详情组件
                 self._script_element_hire_detail()
-
-                time_sleep()
 
                 try:
                     # 获取招聘者状态并检查是否符合期望
@@ -279,14 +275,11 @@ class HomePage(BasePage):
                 if not self._click_communicate_button():  # 如果点击沟通按钮失败，则跳过
                     continue
 
-                time_sleep()
-
                 if not self._get_navigation_bar_recommend_class():
                     self._click_navigation_bar_recommend()
                     time_sleep()
                     return_data['isGoToChat'] = True
                     return return_data
-                time_sleep()
 
                 # 检查是否能够进行沟通
                 if self._get_communicate_pop_title() == '无法进行沟通':  # 如果沟通弹出标题为“无法进行沟通”，则返回沟通计数和是否正常结束表示
@@ -533,7 +526,7 @@ class HomePage(BasePage):
                 locator=Loc.communicate_button_locator,
                 action='点击沟通按钮',
                 is_logger=False,
-            ).click_element()
+            ).delay().click_element()
             return True
         return False
 
@@ -564,7 +557,7 @@ class HomePage(BasePage):
             locator=Loc.communicate_pop_return_button_locator,
             action='点击沟通弹窗"留在此页"',
             is_logger=False,
-        ).click_element()
+        ).delay().click_element()
 
     def _script_hire_list_bottom(self):
         self.script_windows_element(script_type='bottom', is_logger=False)
@@ -591,7 +584,7 @@ class HomePage(BasePage):
             locator=Loc.hire_detail_msg_container_locator,
             action='滑动招聘详情',
             is_logger=False,
-        ).script_specify_element()
+        ).delay().script_specify_element()
 
     def _get_navigation_bar_recommend_class(self):
         return self.wait_element_is_visible(
@@ -605,4 +598,4 @@ class HomePage(BasePage):
             locator=Loc.navigation_bar_recommend_locator,
             action='点击导航栏推荐的元素',
             is_logger=False,
-        ).click_element()
+        ).delay().click_element()

@@ -216,6 +216,7 @@ class BasePage:
             # 清空wait缓存：因执行send_keys方法后，会进行下一步其他操作，故需要清空action，locator等内容
             # 私有方法，仅在内部可调用
             self.__clear_cache()
+            return self
 
     def keys(self, content):
         '''
@@ -258,6 +259,7 @@ class BasePage:
             # 清空wait缓存：因执行send_keys方法后，会进行下一步其他操作，故需要清空action，locator等内容
             # 私有方法，仅在内部可调用
             self.__clear_cache()
+            return self
 
     def get_element(self):
         '''
@@ -298,6 +300,7 @@ class BasePage:
             # 清空wait缓存：因执行click方法后，会进行下一步其他操作，故需要清空action，locator等内容
             # 私有方法，仅在内部可调用
             self.__clear_cache()
+            return self
 
     def move_element(self):
         '''
@@ -327,6 +330,7 @@ class BasePage:
             # 清空wait缓存：因执行click方法后，会进行下一步其他操作，故需要清空action，locator等内容
             # 私有方法，仅在内部可调用
             self.__clear_cache()
+            return self
 
     def script_windows_element(self, script_type: str ,is_logger: bool = True):
         '''
@@ -358,6 +362,7 @@ class BasePage:
             # 清空wait缓存：因执行click方法后，会进行下一步其他操作，故需要清空action，locator等内容
             # 私有方法，仅在内部可调用
             self.__clear_cache()
+            return self
 
     def script_specify_element(self, top: int = None, is_end_block: bool = False):
         '''
@@ -393,6 +398,7 @@ class BasePage:
             # 清空wait缓存：因执行click方法后，会进行下一步其他操作，故需要清空action，locator等内容
             # 私有方法，仅在内部可调用
             self.__clear_cache()
+            return self
 
     def script_go_to_specify_element(self):
         '''
@@ -423,6 +429,7 @@ class BasePage:
             # 清空wait缓存：因执行click方法后，会进行下一步其他操作，故需要清空action，locator等内容
             # 私有方法，仅在内部可调用
             self.__clear_cache()
+            return self
 
     def click_elment_by_js(self):
         '''
@@ -451,6 +458,7 @@ class BasePage:
             # 清空wait缓存：因执行click方法后，会进行下一步其他操作，故需要清空action，locator等内容
             # 私有方法，仅在内部可调用
             self.__clear_cache()
+            return self
 
     # def click_element(self, locator, action=''):
     #     """
@@ -616,6 +624,7 @@ class BasePage:
                 )
         finally:
             self.__clear_cache()
+            return self
 
     def switch_to_new_window(self, handle=None, is_logger: bool = True):
         '''
@@ -648,6 +657,9 @@ class BasePage:
                 self.logger.exception(
                     '在{},{}操作的时候，切换到窗口{}【成功】'.format(self.name, self.action, handle)
                 )
+        finally:
+            self.__clear_cache()
+            return self
 
     def close_current_window_element(self, is_logger: bool = True):
         try:
@@ -664,6 +676,9 @@ class BasePage:
                 self.logger.exception(
                     '在{}, 关闭当前窗口【成功】'.format(self.name)
                 )
+        finally:
+            self.__clear_cache()
+            return self
 
     def get_windows_handles_element(self, is_logger: bool = True):
         try:
@@ -681,6 +696,8 @@ class BasePage:
                     '在{}, 获取窗口句柄【成功】'.format(self.name)
                 )
             return all_handles
+        finally:
+            self.__clear_cache()
 
     def current_url_element(self, is_logger: bool = True):
         try:
@@ -698,6 +715,8 @@ class BasePage:
                     '在{}, url【成功】'.format(self.name)
                 )
             return url
+        finally:
+            self.__clear_cache()
 
     def get_page_screenshot(self, action):
         '''

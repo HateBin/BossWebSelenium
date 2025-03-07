@@ -169,7 +169,7 @@ def convert_page_path_to_url_and_params(page_path):
 
 def rest_time(minutes: list or tuple = None):
     if not minutes:
-        minutes = [5, 30]
+        minutes = settings.REST_TIME_FRAME
     min_sec = minutes[0] * 60
     max_sec = minutes[1] * 60
     time.sleep(random.uniform(min_sec, max_sec))
