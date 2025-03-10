@@ -71,10 +71,10 @@ class HomePageLocators:
     communicate_button_locator = ('xpath', '/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div/div[1]/div[2]/a[2]')
 
     # 沟通弹窗标题定位
-    communicate_pop_title_locator = ('xpath', '/html/body/div[8]/div[2]/div[1]/h3')
+    communicate_pop_title_locator = ('xpath', '/html/body/div[10]/div[2]/div[1]/h3')
 
     # 沟通弹窗返回按钮定位
-    communicate_pop_return_button_locator = ('xpath', '/html/body/div[8]/div[2]/div[3]/a[1]')
+    communicate_pop_return_button_locator = ('xpath', '/html/body/div[10]/div[2]/div[3]/a[1]')
 
     # 导航栏"推荐"的类名定位
     navigation_bar_recommend_class_locator = ('xpath', '/html/body/div[1]/div[1]/div/div/div[1]/div[2]/ul/li[2]')
